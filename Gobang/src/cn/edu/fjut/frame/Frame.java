@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 import cn.edu.fjut.chess.Chess;
 import cn.edu.fjut.client.Client;
+import cn.edu.fjut.dao.UserDao;
 import cn.edu.fjut.listenner.FrameMouseListener;
 import cn.edu.fjut.listenner.WebFrameMouseListener;
 
@@ -130,12 +131,6 @@ public class Frame extends JFrame {
     //πÿ±’
     private void close() {
     	this.dispose();
-    	try {
-			client.socket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 	// ªÊ÷∆∆Â≈Ã
 	public void paint(Graphics g) {

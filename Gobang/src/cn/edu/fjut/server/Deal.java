@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
 
+import cn.edu.fjut.dao.UserDao;
+
 /**
  * socket处理类
  * 
@@ -34,6 +36,7 @@ public class Deal implements Runnable {
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		System.out.println("客户端退出");
+		Server.visitList(mainSocket, false);
 	}finally {
     	try {
     		if(in!=null)
@@ -62,6 +65,7 @@ public class Deal implements Runnable {
 			}	
 			else{
 				write(mainSocket,"等待对手");
+				Server.map.put(mainSocket, mainSocket);
 			}
 		}
 		else if(str.equals("开始游戏")) {
@@ -93,10 +97,12 @@ public class Deal implements Runnable {
 		  if(socket!=null) {
 			  write(socket, "您输了");
 			  write(socket,"-");
+			  update(Server.mapUser.get(socket),-1);
 			  Server.mapStatus.put(socket, "no"); 
 		  }
 		  write(mainSocket, "您赢了");
 		  write(mainSocket,"+");
+		  update(Server.mapUser.get(mainSocket),1);
 		  Server.mapStatus.put(mainSocket, "no"); 
 		}
 		else {
@@ -106,23 +112,17 @@ public class Deal implements Runnable {
 					if(Server.mapStatus.get(mainSocket).equals("yes")&&Server.mapStatus.get(socket).equals("yes")) {
 						write(socket, "您获胜");
 						write(socket,"+");
+						update(Server.mapUser.get(socket),1);
 						write(mainSocket,"-");
+						update(Server.mapUser.get(mainSocket),-1);
 					}
-				Server.map.put(socket, null);
+				Server.map.put(socket, socket);
 				Server.mapStatus.put(socket, "no");
 				str=Server.mapUser.get(mainSocket)+str;
 				write(socket,str);
 				}
 				Server.map.put(mainSocket, null);
 				Server.mapStatus.put(mainSocket, "no");
-				Server.visitList(mainSocket, false);
-				try {
-					mainSocket.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
 			}
 			if(Server.map.get(mainSocket)!=null)
 			write(Server.map.get(mainSocket),str);
@@ -144,6 +144,12 @@ public class Deal implements Runnable {
 		}finally {
 			//out.close();
 		}
+	}
+	
+	//更新数据库
+	private void update(String userName,int dv) {
+		UserDao ud=new UserDao();
+		ud.updateUser(userName, dv);
 	}
 
 }

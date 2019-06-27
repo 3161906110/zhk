@@ -16,8 +16,10 @@ public class Client {
 		
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		socket=null;
+		System.out.println("连接服务器失败");
 	}
+	  //System.out.println(socket);
   }
   
   //向服务器发送数据

@@ -37,7 +37,7 @@ public class Server {
 	public static synchronized void visitList(Socket mainSocket, boolean is) {
 		if (is == true) {
 			for (Socket socket : Server.socketList) {
-				if (Server.map.get(socket) == null && mainSocket != socket) {
+				if (Server.map.get(socket) == socket && mainSocket != socket) {
 					Server.map.put(mainSocket, socket);
 					Server.map.put(socket, mainSocket);
 					break;

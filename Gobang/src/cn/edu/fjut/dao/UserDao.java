@@ -1,6 +1,7 @@
 package cn.edu.fjut.dao;
 
 import java.util.List;
+import java.util.Vector;
 
 
 
@@ -60,4 +61,23 @@ public class UserDao {
 		List list=(List) DBUtil.executeQuery("select * from User order by userVictory", User.class, null);
 		return list;
 	}
+  
+  //修改用户数据
+  public void updateUser(String userName,int dv) {
+	  DBUtil.execUpdate("update user set userVictory = userVictory + ? where userName = ?",dv,userName); 
+  }
+  
+  //查询战绩
+  public void findUser(Vector columnName,Vector rowData) {
+	  List list=(List) DBUtil.executeQuery("select * from User order by userVictory desc", User.class,null);
+		columnName.add("用户名");
+		columnName.add("战绩分数");;
+		for(int i=0;i<list.size();i++) {
+			User user=(User)list.get(i);
+			Vector line1 = new Vector();
+		    line1.add(user.getUserName());
+		    line1.add(user.getUserVictory());
+			rowData.add(line1);
+		}
+  }
 }

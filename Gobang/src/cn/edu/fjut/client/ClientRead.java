@@ -25,14 +25,13 @@ public ClientRead(Socket socket,Frame frame) {
 	   this.frame=frame;
    }
    public void run() {
+
 	   BufferedReader in=null;
 	   try {
 	    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		while(true) {
-			if(socket==null) {
-				break;
-			}
 			String str=in.readLine();
+			if(frame!=null)
 			frame.deal(str);
 		}
 	} catch (IOException e) {

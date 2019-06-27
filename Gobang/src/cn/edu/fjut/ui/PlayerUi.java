@@ -26,6 +26,9 @@ public class PlayerUi extends JFrame {
 	private JPanel contentPane;
 	private String userName;//用户名
     public Frame frame;
+    private Client client;//客户端
+    ClientRead cr;//监听事件
+
 	/**
 	 * Launch the application.
 	 */
@@ -48,6 +51,7 @@ public class PlayerUi extends JFrame {
 	 */
 	public PlayerUi(String  userName) {
 		this.userName=userName;
+		client=null;
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -58,12 +62,18 @@ public class PlayerUi extends JFrame {
 		JButton btnNewButton = new JButton("\u6218\u7EE9\u699C");
 		btnNewButton.setBounds(167, 80, 93, 23);
 		contentPane.add(btnNewButton);
-		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 SourceShow ss=new  SourceShow();
+				 ss.show();
+				
+			}
+		});
 		JButton btnNewButton_1 = new JButton("\u672C\u5730\u5BF9\u6218");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame = new Frame(false,null);
-				frame.show();
+				Frame frame1 = new Frame(false,null);
+				frame1.show();
 				
 			}
 		});
@@ -73,12 +83,19 @@ public class PlayerUi extends JFrame {
 		JButton btnNewButton_2 = new JButton("\u7F51\u7EDC\u5BF9\u6218");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Client client=new Client();
+				if(client==null) {
+					client=new Client();
+					if(client.socket==null) {
+						client=null;
+						return ;
+					}
+					cr=new ClientRead(client.socket,null);
+					Thread thread=new Thread(cr);
+					thread.start();
+				}
 				frame = new Frame(true,client);
 				frame.show();
-				ClientRead cr=new ClientRead(client.socket,frame);
-				Thread thread=new Thread(cr);
-				thread.start();
+				cr.setFrame(frame);
 				client.write(userName);
 				client.write("网络对战");
 			}
