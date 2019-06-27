@@ -12,7 +12,7 @@ import cn.edu.fjut.frame.Frame;
  *
  */
 public  class FrameMouseListener implements MouseListener{
-	static int len=50;
+	static int len=25;
     Frame frame;//ÆåÅÌ×ö²ÎÊý
     public  FrameMouseListener(Frame frame) {
     	this.frame=frame;
@@ -41,6 +41,8 @@ public  class FrameMouseListener implements MouseListener{
 		    		row--;
 		    	}
 	     }
+	     if(row<0||row>=19||col<0||col>=19)
+	    	 return ;
 	     if(frame.chess[row][col].getColor()==0) {
 	    	 int color;
 	    	 if(frame.isBlack==true)

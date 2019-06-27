@@ -6,11 +6,21 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 import cn.edu.fjut.frame.Frame;
-
+/**
+ * ¿Í»§¶Ë¼àÌýÀà
+ * @author Administrator
+ *
+ */
 public class ClientRead implements Runnable{
    private Socket socket;
    private Frame frame;
-   public ClientRead(Socket socket,Frame frame) {
+   public Frame getFrame() {
+	return frame;
+}
+public void setFrame(Frame frame) {
+	this.frame = frame;
+}
+public ClientRead(Socket socket,Frame frame) {
 	   this.socket=socket;
 	   this.frame=frame;
    }
@@ -19,6 +29,9 @@ public class ClientRead implements Runnable{
 	   try {
 	    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		while(true) {
+			if(socket==null) {
+				break;
+			}
 			String str=in.readLine();
 			frame.deal(str);
 		}
@@ -29,6 +42,7 @@ public class ClientRead implements Runnable{
 		try {
 			if(in!=null)
 			in.close();
+			if(socket!=null)
 			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

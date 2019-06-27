@@ -7,7 +7,7 @@ package cn.edu.fjut.chess;
  *
  */
 public class Chess {
-	static int len = 50;
+	static int len = 25;
 	int x, y;// зјБъ
 
 	public int getX() {

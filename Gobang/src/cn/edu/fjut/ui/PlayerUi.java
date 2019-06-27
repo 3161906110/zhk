@@ -10,10 +10,12 @@ import javax.swing.border.EmptyBorder;
 import cn.edu.fjut.client.Client;
 import cn.edu.fjut.client.ClientRead;
 import cn.edu.fjut.frame.Frame;
+import cn.edu.fjut.user.User;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 /**
  * 用户界面类
  * @author Administrator
@@ -22,11 +24,12 @@ import java.awt.event.ActionEvent;
 public class PlayerUi extends JFrame {
 
 	private JPanel contentPane;
+	private String userName;//用户名
     public Frame frame;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -38,12 +41,14 @@ public class PlayerUi extends JFrame {
 			}
 		});
 	}
+	*/
   
 	/**
 	 * Create the frame.
 	 */
-	public PlayerUi() {
-	     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public PlayerUi(String  userName) {
+		this.userName=userName;
+	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,17 +73,21 @@ public class PlayerUi extends JFrame {
 		JButton btnNewButton_2 = new JButton("\u7F51\u7EDC\u5BF9\u6218");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Client c=new Client();
-				frame = new Frame(true,c);
+				Client client=new Client();
+				frame = new Frame(true,client);
 				frame.show();
-				c.write("网络对战");
-				ClientRead cr=new ClientRead(c.socket,frame);
+				ClientRead cr=new ClientRead(client.socket,frame);
 				Thread thread=new Thread(cr);
 				thread.start();
-				
+				client.write(userName);
+				client.write("网络对战");
 			}
 		});
 		btnNewButton_2.setBounds(167, 185, 93, 23);
 		contentPane.add(btnNewButton_2);
+		
+		JLabel lblNewLabel = new JLabel("欢迎您,"+userName);
+		lblNewLabel.setBounds(353, 25,100, 15);
+		contentPane.add(lblNewLabel);
 	}
 }

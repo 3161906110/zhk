@@ -18,9 +18,12 @@ import cn.edu.fjut.listenner.WebFrameMouseListener;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 /**
  * 棋盘类
@@ -31,14 +34,15 @@ import javax.swing.JLabel;
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
-	private JLabel lblNewLabel;
 	private MouseListener fml;
+	private JTextArea textArea;
 	public Client client;
 	public boolean isEnd=false;//是否结束
 	public boolean isBlack=true;//黑棋先手
 	public boolean myColor;//棋子颜色
+	public boolean isInit;//是否正在对战
 	public Chess[][] chess = new Chess[19][19];
-	static int len = 50;
+	static int len = 25;
 	/**
 	 * Launch the application.
 	 */
@@ -59,8 +63,9 @@ public class Frame extends JFrame {
 	 * 初始化棋盘参数 Create the frame.
 	 */
 	public Frame(boolean isWeb,Client client) {
+		this.isInit=false;
 		this.setTitle("五子棋");
-		this.setSize(1000, 1000);
+		this.setSize(700, 500);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		this.setLocationRelativeTo(null);// 默认居中
@@ -68,19 +73,27 @@ public class Frame extends JFrame {
 		this.getContentPane().setBackground(new Color(240, 233, 217));
 		getContentPane().setLayout(null);
 		
-		JButton btnNewButton = new JButton("\u518D\u6765\u4E00\u5C40");
+		JButton btnNewButton = new JButton("\u5F00\u59CB\u6E38\u620F");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				init();
-				
+				if(isInit==true) {
+					return ;
+				}
+				if(client==null) {
+					init();
+				}
+				else {
+		    	write("开始游戏");
+				}
 			}
 		});
-		btnNewButton.setBounds(414, 939, 119, 23);
+		btnNewButton.setBounds(575, 76, 119, 23);
 		getContentPane().add(btnNewButton);
 		
-		lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(236, 939, 168, 23);
-		getContentPane().add(lblNewLabel);
+		textArea = new JTextArea();
+		textArea.setBounds(586, 109, 98, 332);
+		textArea.setLineWrap(true);
+		getContentPane().add(textArea);
 		this.setVisible(true);
 		for (int i = 0; i < 19; i++) {
 			for (int j = 0; j < 19; j++) {
@@ -95,14 +108,15 @@ public class Frame extends JFrame {
 		}
 		this.addMouseListener(fml);
         this.client=client;
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+              write("离开房间");
+              close();
+            }
+          });
 	}
 	//初始化
     private void init() {
-    	if(isEnd==false&&client!=null) {
-    		return;
-    	}
-    	if(client!=null)
-    		write("再来一局");
     	for (int i = 0; i < 19; i++) {
 			for (int j = 0; j < 19; j++) {
 				chess[i][j].setColor(0);
@@ -111,6 +125,17 @@ public class Frame extends JFrame {
     	isBlack=true;
     	isEnd=false;
     	repaint();
+    }
+    
+    //关闭
+    private void close() {
+    	this.dispose();
+    	try {
+			client.socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 	// 绘制棋盘
 	public void paint(Graphics g) {
@@ -129,11 +154,11 @@ public class Frame extends JFrame {
 				switch (chess[i][j].getColor()) {
 				case -1:
 					g.setColor(Color.BLACK);
-					g.fillOval(chess[i][j].getX() - 20, chess[i][j].getY() - 20, 40, 40);
+					g.fillOval(chess[i][j].getX() - len/2+2, chess[i][j].getY()-len/2+2, len-5, len-5);
 					break;
 				case 1:
 					g.setColor(Color.WHITE);
-					g.fillOval(chess[i][j].getX() - 20, chess[i][j].getY() - 20, 40, 40);
+					g.fillOval(chess[i][j].getX() - len/2+2,chess[i][j].getY()-len/2+2, len-5,len-5);
 					break;
 				}
 
@@ -164,6 +189,8 @@ public class Frame extends JFrame {
 	
 	//逻辑处理
 	public void deal(String str) {
+		if(str==null)
+			return ;
 		if('0'<=str.charAt(0)&&str.charAt(0)<='9') {
 			try {
 			int result=Integer.valueOf(str);
@@ -183,19 +210,32 @@ public class Frame extends JFrame {
 				
 			}
 		}
-		else if(str.equals("再来一局")) {
-			init();
+		else if(str.equals("+")) {
+			this.isInit=false;
+			this.myColor=false;
+		}
+		else if(str.equals("-")) {
+			this.isInit=false;
+			this.myColor=false;
 		}
 		else {
-		if(str.indexOf("黑")!=-1)
+		if(str.indexOf("黑")!=-1) {
+			init();
+			this.isInit=true;
 			this.myColor=true;
-		else if(str.indexOf("白")!=-1)
-			this.myColor=false;	
-		  lblNewLabel.setText(str);
+		}
+		else if(str.indexOf("白")!=-1) {
+			init();
+			this.isInit=true;
+			this.myColor=false;
+		}
+		 textArea.append(str+"\n");
+		 textArea.setEditable(false);
 		}
 	}
 	//发送数据
 	public void write(String str) {
+		if(client!=null)
 		client.write(str);
 	}
 }
