@@ -27,6 +27,9 @@ SpawnPrioritySeconds=60.0
 SpawnPrioritySeconds=60.0
 
 ### 配置类别
+
+拆分成不同类别，方便编辑和使用
+
  - Compat（兼容性）
  - DeviceProfiles（设备概述文件）
  - Editor（编辑器）
