@@ -20,7 +20,21 @@ SpawnPrioritySeconds=60.0
 
 /Script/Engine是模块名，RendererSettings是类名
 
-![1711548761232](https://github.com/3161906110/zhk/assets/46776443/1098cf16-cb86-447c-9f23-1c1a7460dc4c)
+![1711549099215](https://github.com/3161906110/zhk/assets/46776443/f62ea85f-9efb-40ca-9adc-e71d46b84529)
 
-键-值对
+键-值对 key=value
 
+SpawnPrioritySeconds=60.0
+
+### 配置类别
+ - Compat（兼容性）
+ - DeviceProfiles（设备概述文件）
+ - Editor（编辑器）
+ - EditorGameAgnostic（编辑器游戏未知）
+ - EditorKeyBindings（编辑器按键绑定）
+ - EditorUserSettings（编辑器用户设置）
+ - Engine(引擎)
+ - Game(游戏)
+ - Input（输入）
+ - Lightmass（全局光照）
+ - Scalability（可扩展性）
