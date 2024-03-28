@@ -41,3 +41,26 @@ SpawnPrioritySeconds=60.0
  - Input（输入）
  - Lightmass（全局光照）
  - Scalability（可扩展性）
+
+### 配置路径
+
+ - \Engine\Config\
+ - \Engine\Saved\Config\ (运行后生成)
+ - [ProjectName]\Config\
+ - [ProjectName]\Saved\Config (运行后生成)
+   
+打包文件
+
+ - Development/Debug 打包目录\项目名称\Saved\Config\WindowsNoEditor
+ - Shipping C:\Users\用户名\AppData\Local\项目名称\Saved\Config\WindowsNoEditor
+
+同种类别在不同路径(项目和平台)可能有一份ini文件，如Engine类别
+
+1. Engine/Config/Base.ini
+2. Engine/Config/BaseEngine.ini
+3. Engine/Config/[Platform]/[Platform]Engine.ini
+4. [ProjectDirectory]/Config/DefaultEngine.ini
+5. [ProjectDirectory]/Config/[Platform]/[Platform]Engine.ini
+6. [ProjectDirectory]/Saved/Config/[Platform]/Engine.ini
+
+读取某种类型配置文件信息的时候，会按照上面的路径依次读取，层级越高里面的配置信息优先级越高。
