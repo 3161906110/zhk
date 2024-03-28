@@ -63,4 +63,20 @@ SpawnPrioritySeconds=60.0
 5. [ProjectDirectory]/Config/[Platform]/[Platform]Engine.ini
 6. [ProjectDirectory]/Saved/Config/[Platform]/Engine.ini
 
+主要根据引擎的GConfigLayers定义
+
+![image](https://github.com/3161906110/zhk/assets/46776443/ee28fd7c-db62-405a-a7a3-8fade4b8397e)
+
 读取某种类型配置文件信息的时候，会按照上面的路径依次读取，层级越高里面的配置信息优先级越高。
+
+### 配置读写
+
+通过section、key和配置类别来写入或者读取对应的值
+
+![image](https://github.com/3161906110/zhk/assets/46776443/fbb80c7b-b7cc-4dfc-b816-06201090538d)
+
+![image](https://github.com/3161906110/zhk/assets/46776443/c5ff4e25-9379-4217-b9a9-da98ce116195)
+
+
+### 通过反射系统读写
+待补充
